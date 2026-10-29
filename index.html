@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Springs Lab</title>
+<style>
+html{color-scheme:light}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: lab bench, sixth in the series. Name strip + four station tabs; each station is a diagram stage beside a control column (stacks on phones). */
+/* Layout: lab bench, fifth in the series. Name strip + six station tabs; each station is a diagram stage beside a control column (stacks on phones). */
+:root{
+  --bg:#ebf0ee; --surface:#ffffff; --surface-2:#f1f5f3; --ink:#15211d; --muted:#53645d; --line:#c6d3cd;
+  --xa:#0f766e; --xa-soft:#d2eee8; --da:#6b3fbf; --da-soft:#e7def8; --share:#b07800; --share-soft:#f7ebc6;
+  --good:#1f7d48; --good-soft:#d9f0e2; --bad:#b3382f; --bad-soft:#f7dcd8;
+  --el-h:#f6f8f7; --el-c:#3a4440; --el-n:#3a63c4; --el-o:#cf4337; --el-si:#c08a32; --el-cl:#3c974a; --el-br:#9a3a2a; --el-i:#6a3fa0;
+  --el-f:#5f9e3f; --el-s:#b48a12; --el-p:#c96a22; --el-b:#c26d60; --el-be:#6d8231; --el-al:#7d8296; --el-xe:#23808f; --el-se:#9a6f30; --el-na:#7b52bd; --el-mg:#2a8466;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1715; --surface:#17221f; --surface-2:#1d2b27; --ink:#e3ece8; --muted:#94a8a0; --line:#2b3c36;
+  --xa:#4fd1c0; --xa-soft:#133a35; --da:#b496f2; --da-soft:#2c2244; --share:#f0c14b; --share-soft:#3a3016;
+  --good:#62cf91; --good-soft:#15352a; --bad:#f2837a; --bad-soft:#3d1d1b;
+  --el-h:#dfe6e3; --el-c:#8d9a95; --el-n:#7b9cf0; --el-o:#ef6b5f; --el-si:#e0b062; --el-cl:#66c873; --el-br:#d0705e; --el-i:#a785dc; --el-f:#8fd16f; --el-s:#e3c04f; --el-p:#f0995a; --el-b:#e39a8f; --el-be:#a6bb63; --el-al:#aeb3c6; --el-xe:#5cc3d3; --el-se:#cfa261; --el-na:#b496f2; --el-mg:#5cc7a1; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f1715; --surface:#17221f; --surface-2:#1d2b27; --ink:#e3ece8; --muted:#94a8a0; --line:#2b3c36;
+  --xa:#4fd1c0; --xa-soft:#133a35; --da:#b496f2; --da-soft:#2c2244; --share:#f0c14b; --share-soft:#3a3016;
+  --good:#62cf91; --good-soft:#15352a; --bad:#f2837a; --bad-soft:#3d1d1b;
+  --el-h:#dfe6e3; --el-c:#8d9a95; --el-n:#7b9cf0; --el-o:#ef6b5f; --el-si:#e0b062; --el-cl:#66c873; --el-br:#d0705e; --el-i:#a785dc; --el-f:#8fd16f; --el-s:#e3c04f; --el-p:#f0995a; --el-b:#e39a8f; --el-be:#a6bb63; --el-al:#aeb3c6; --el-xe:#5cc3d3; --el-se:#cfa261; --el-na:#b496f2; --el-mg:#5cc7a1; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+.page{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 48px;display:grid;gap:22px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{flex:none}
+.eyebrow{margin:0;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{margin:2px 0 0;font-family:var(--f-display);font-weight:800;font-size:clamp(1.9rem,4.2vw,2.7rem);line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+h2{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.06rem;letter-spacing:-.005em}
+p{margin:0}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px}
+.tabs button{font:inherit;font-weight:700;font-size:.92rem;border:0;background:transparent;color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer;display:flex;gap:8px;align-items:baseline}
+.tabs button .n{font-family:var(--f-mono);font-size:.72rem;opacity:.8}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+:focus-visible{outline:3px solid var(--xa);outline-offset:2px}
+[role="tabpanel"]{display:grid;gap:22px}
+.intro{max-width:70ch;color:var(--muted)}
+.intro b{color:var(--ink)}
+.station{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.station{grid-template-columns:minmax(0,1fr)}}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px;min-width:0}
+.stage svg{width:100%;height:auto;display:block;max-width:100%}
+.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.controls{display:grid;gap:20px;min-width:0}
+.ctl{display:grid;gap:9px;min-width:0}
+.small{font-size:.88rem;color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.btn{font:inherit;font-weight:700;font-size:.93rem;padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;line-height:1.2}
+.btn:hover:not(:disabled){border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-width:46px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.ans-right{background:var(--good-soft);border-color:var(--good);color:var(--ink)}
+.chip.ans-wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--ink)}
+.grouplbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;max-width:100%;width:max-content}
+.seg button{font:inherit;font-weight:700;border:0;background:var(--surface);color:var(--muted);padding:8px 14px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.pill{display:inline-block;padding:3px 11px;border-radius:999px;font-weight:700;font-size:.82rem;background:var(--surface-2);border:1px solid var(--line)}
+.pill.on{background:var(--good-soft);border-color:var(--good)}
+.pill.warn{background:var(--share-soft);border-color:var(--share)}
+.verdict{border-radius:var(--r);padding:12px 14px;background:var(--surface);border:1px solid var(--line);display:grid;gap:4px}
+.verdict.good{background:var(--good-soft);border-color:var(--good)}
+.verdict.bad{background:var(--bad-soft);border-color:var(--bad)}
+.verdict strong{font-family:var(--f-display);font-size:1.08rem;font-weight:600}
+details.explain{border-top:1px solid var(--line);padding-top:10px}
+details.explain summary{cursor:pointer;font-weight:700}
+details.explain p{margin-top:6px;color:var(--muted);max-width:62ch}
+.msg{font-size:.92rem;min-height:1.4em}
+.msg.good{color:var(--good)} .msg.bad{color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--muted)}
+.legend .lx{color:var(--xa);font-weight:700;font-family:var(--f-mono)}
+.legend .ld{color:var(--da);font-weight:700;font-family:var(--f-mono)}
+.legend .ls{display:inline-block;width:14px;height:10px;border-radius:5px;background:var(--share-soft);border:1px solid var(--share);vertical-align:-1px;margin-right:4px}
+sub,sup{font-size:.68em;line-height:0}
+/* svg text + shapes */
+.t-sym{fill:var(--ink);font-family:var(--f-display);font-weight:800}
+.t-ink{fill:var(--ink);font-family:var(--f-mono)}
+.t-muted{fill:var(--muted);font-family:var(--f-mono)}
+.shell{fill:none;stroke:var(--muted);stroke-width:1.6}
+.shell.full{stroke:var(--good);stroke-width:2.2}
+.lens{fill:var(--share-soft);stroke:none}
+.x-a{stroke:var(--xa);stroke-width:2.6;stroke-linecap:round;fill:none}
+.d-b{fill:var(--da)}
+.bondline{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+
+/* station 2 + 3 canvases */
+.caption{font-size:.95rem;max-width:70ch}
+.slider{position:relative}
+.slider input{width:100%;accent-color:var(--xa);margin:0}
+.scale{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.check{display:flex;gap:10px;align-items:center;font-weight:700;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--ink);margin:0}
+.findings{display:grid;gap:8px}
+.finding{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.finding .ft{font-weight:700}
+.finding .fd{grid-column:1/-1;font-size:.88rem;color:var(--muted)}
+.finding .st{font-size:.74rem;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid var(--line);align-self:start;white-space:nowrap}
+.finding.found{border-color:var(--good)}
+.finding.found .st{background:var(--good-soft);border-color:var(--good)}
+.strip-wrap{overflow-x:auto}
+#stripSvg{width:100%;min-width:300px;height:auto;display:block}
+.props{display:grid;gap:8px}
+.prop{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:4px 12px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.prop .pk{font-weight:700}
+.prop .pv{color:var(--muted);font-size:.92rem}
+.prop.known .pv{color:var(--ink)}
+@media (max-width:420px){.prop{grid-template-columns:minmax(0,1fr)}}
+/* station 4 */
+.sortbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.score{font-family:var(--f-display);font-weight:800;font-size:1.4rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:10px;align-content:start}
+.card.right{border-color:var(--good)}
+.card.wrong{border-color:var(--bad)}
+.card h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.05rem}
+.card dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;font-size:.88rem}
+.card .els{font-size:.86rem;color:var(--muted);margin-top:-6px}
+.card dt{color:var(--muted)}
+.card dd{margin:0;font-family:var(--f-mono);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.card .choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.card .choices button{font:inherit;font-size:.8rem;font-weight:700;padding:7px 4px;border-radius:7px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer;line-height:1.15}
+.card .choices button:hover:not(:disabled){border-color:var(--ink)}
+.card .choices button:disabled{cursor:default}
+.card .choices button.right{background:var(--good-soft);border-color:var(--good)}
+.card .choices button.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.card .why{font-size:.88rem;color:var(--muted)}
+.card .why b{color:var(--ink)}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+table.cmp{border-collapse:collapse;width:100%;min-width:620px;font-size:.92rem}
+table.cmp th,table.cmp td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.cmp thead th{font-family:var(--f-display);font-weight:600;background:var(--surface-2)}
+table.cmp tbody th{font-weight:700;color:var(--muted);width:22%}
+table.cmp tr:last-child td,table.cmp tr:last-child th{border-bottom:0}
+/* quiz */
+.quizbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;max-width:860px}
+.quiz{display:grid;gap:14px;max-width:860px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:10px}
+.q .qn{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);font-weight:700}
+.q .qt{font-weight:700;font-size:1.02rem}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:560px){.opts{grid-template-columns:minmax(0,1fr)}}
+.opt{font:inherit;text-align:left;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--good-soft);border-color:var(--good);font-weight:700}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.fb{font-size:.92rem;color:var(--muted)}
+.fb b{color:var(--ink)}
+footer{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;max-width:95ch}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
+
+/* bonding lab */
+.formula-big{font-family:var(--f-display);font-weight:800;font-size:clamp(2rem,5vw,3rem);line-height:1;letter-spacing:-.01em}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px;align-content:start;min-width:0}
+.panel h2 .small,.ctl h2 .small{font-family:var(--f-body);font-weight:400}
+.panel svg{width:100%;height:auto;display:block;max-width:100%}
+.result{display:grid;gap:2px;border-radius:var(--r);padding:10px 12px;background:var(--surface-2);border:1px solid var(--line);min-width:0}
+.result .rv{font-family:var(--f-display);font-weight:800;font-size:1.25rem;line-height:1.15;overflow-wrap:anywhere}
+.result .rl{font-size:.72rem;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.result.hl{background:var(--xa-soft);border-color:var(--xa)}
+ol.steps{margin:0;padding:0;list-style:none;display:grid;gap:7px;counter-reset:st}
+ol.steps li{counter-increment:st;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+ol.steps li::before{content:counter(st);grid-row:span 2;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:.8rem;font-family:var(--f-mono)}
+ol.steps .sh{font-weight:700}
+ol.steps .sm{font-size:.9rem;color:var(--muted);overflow-wrap:anywhere}
+.cv{width:100%;max-width:100%;display:block;border-radius:8px;background:var(--surface-2);touch-action:none;cursor:grab;aspect-ratio:4/3}
+.cv:active{cursor:grabbing}
+.cv.wide{aspect-ratio:16/10;cursor:default}
+.cvwrap{position:relative}
+.cvcover{position:absolute;inset:0;display:grid;place-items:center;border-radius:8px;background:color-mix(in srgb,var(--surface-2) 88%,transparent);font-family:var(--f-display);font-weight:800;font-size:clamp(1.2rem,3vw,1.6rem);color:var(--muted);text-align:center;padding:16px}
+.inrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.inrow label{font-weight:700;min-width:8.5em}
+select.num,.num{font:inherit;font-family:var(--f-mono);font-size:.95rem;padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);min-width:0;max-width:100%}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stepper button{font:inherit;font-weight:800;width:34px;height:34px;border:0;background:var(--surface-2);color:var(--ink);cursor:pointer}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper output{min-width:2.2em;text-align:center;font-family:var(--f-mono);font-weight:700}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--share-soft);border:1px solid var(--share);color:var(--ink);vertical-align:2px;margin-left:6px}
+.s-txt{fill:var(--ink);font-family:var(--f-mono);font-size:13px}
+.s-mut{fill:var(--muted);font-family:var(--f-mono);font-size:12px}
+.s-head{fill:var(--ink);font-family:var(--f-display);font-weight:600;font-size:15px}
+.s-sym{fill:var(--ink);font-family:var(--f-display);font-weight:800}
+.s-onfill{fill:#fff;font-family:var(--f-display);font-weight:800}
+.dlt{fill:var(--da);font-family:var(--f-mono);font-weight:700}
+.dlt.pos{fill:var(--xa)}
+.ebar{fill:var(--surface-2);stroke:var(--line)}
+.tiles .t-cat{fill:var(--xa-soft);stroke:var(--xa);stroke-width:1.5}
+.tiles .t-an{fill:var(--da-soft);stroke:var(--da);stroke-width:1.5}
+.grid13{display:grid;grid-template-columns:auto repeat(4,minmax(0,1fr));gap:6px;font-size:.84rem}
+.grid13 .gh{font-weight:700;color:var(--muted);font-size:.74rem;align-self:end;text-align:center}
+.grid13 .gr{font-weight:700;color:var(--muted);font-size:.74rem;align-self:center;white-space:nowrap}
+.grid13 button{font:inherit;font-size:.8rem;line-height:1.2;text-align:center;padding:7px 4px;border-radius:7px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted);cursor:pointer;min-height:48px}
+.grid13 button.found{background:var(--xa-soft);border-color:var(--xa);color:var(--ink);font-weight:700}
+.grid13 button.found span{display:block;font-weight:400;font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
+.grid13 .na{border:1px dashed var(--line);border-radius:7px;min-height:48px}
+.tablewrap{overflow-x:auto}
+.ticks{display:grid;gap:6px}
+.vs{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:stretch}
+.vs .or{align-self:center;font-weight:800;color:var(--muted);font-family:var(--f-display)}
+.vsbtn{font:inherit;text-align:left;padding:12px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer;display:grid;gap:3px;min-width:0}
+.vsbtn b{font-family:var(--f-display);font-size:1.15rem}
+.vsbtn .small{overflow-wrap:anywhere}
+.vsbtn:hover:not(:disabled){border-color:var(--ink)}
+.vsbtn:disabled{cursor:default}
+.vsbtn.right{background:var(--good-soft);border-color:var(--good)}
+.vsbtn.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.vsbtn .bpv{font-family:var(--f-mono);font-weight:700}
+#bpChart,#fxSvg,#vdwSvg,#dbSvg,#ibSvg,#bpSvg{width:100%;height:auto;display:block;max-width:100%}
+.chips.sm .chip{min-width:0;padding:5px 10px;font-size:.9rem}
+.bp-pt{cursor:pointer}
+.chip[aria-pressed="true"] .small{color:inherit;opacity:.75}
+.card dl{grid-template-columns:minmax(0,1fr) minmax(0,max-content)}
+.card dd{overflow-wrap:anywhere}
+.panel{grid-template-columns:minmax(0,1fr)}
+.panel .seg{width:auto}
+.panel>.pill{justify-self:start}
+.s-lab{fill:var(--ink);font-family:var(--f-body);font-size:14px}
+#bpChart{min-width:600px}
+/* particles lab */
+:root{--p-water:#2f6fc4;--p-ice:#6fa6dd;--p-n2:#7f8e88;--p-o2:#cf4337;--p-salt:#9aa6ad;--p-sugar:#c8925a;--p-sand:#c09325;--p-ink:#7b3fbf;--p-red:#d0443a;--p-yellow:#d9b21c;--p-blue:#2f6fc4;--p-green:#2f9a55;--p-iron:#3f4950;--p-nh3:#3a63c4;--p-hcl:#3c974a;--p-ring:#ffffff;--glass:#9bb0aa}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--p-water:#5c9ef0;--p-ice:#9cc6f0;--p-n2:#a7b5b0;--p-o2:#ef6b5f;--p-salt:#c9d2d6;--p-sugar:#e0ad78;--p-sand:#e0b74a;--p-ink:#b496f2;--p-red:#f2837a;--p-yellow:#f0cf4b;--p-blue:#5c9ef0;--p-green:#62cf91;--p-iron:#9aa6ad;--p-nh3:#7b9cf0;--p-hcl:#66c873;--p-ring:#ffffff;--glass:#6d827c}}
+:root[data-theme="dark"]{--p-water:#5c9ef0;--p-ice:#9cc6f0;--p-n2:#a7b5b0;--p-o2:#ef6b5f;--p-salt:#c9d2d6;--p-sugar:#e0ad78;--p-sand:#e0b74a;--p-ink:#b496f2;--p-red:#f2837a;--p-yellow:#f0cf4b;--p-blue:#5c9ef0;--p-green:#62cf91;--p-iron:#9aa6ad;--p-nh3:#7b9cf0;--p-hcl:#66c873;--p-ring:#ffffff;--glass:#6d827c}
+.cv.w16{aspect-ratio:16/10;cursor:default}
+.cv.w2{aspect-ratio:2/1;cursor:default}
+.cv.w3{aspect-ratio:3/1;cursor:default}
+.cv.w4{aspect-ratio:15/4;cursor:default}
+.cv.sq{aspect-ratio:1/1;cursor:default}
+.mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mini .result .rv{font-size:1.05rem}
+.logbox{display:flex;flex-wrap:wrap;gap:6px}
+.logbox .pill{font-size:.8rem}
+table.facts{border-collapse:collapse;width:100%;font-size:.92rem}
+table.facts th,table.facts td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.facts thead th{font-family:var(--f-display);font-weight:600;background:var(--surface-2)}
+table.facts tbody th{color:var(--muted);font-weight:700;width:26%}
+table.facts td.q{color:var(--muted)}
+table.facts td.y{color:var(--good);font-weight:700}
+table.facts td.n{color:var(--bad);font-weight:700}
+.sortgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.scard{border:1px solid var(--line);border-radius:8px;background:var(--surface-2);padding:9px 10px;display:grid;gap:6px;align-content:start}
+.scard b{font-family:var(--f-display);font-weight:600}
+.scard .row button{font:inherit;font-size:.8rem;font-weight:700;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.scard.right{border-color:var(--good);background:var(--good-soft)}
+.scard.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.scard .why{font-size:.82rem;color:var(--muted)}
+.big{font-family:var(--f-display);font-weight:800;font-size:clamp(1.6rem,3.5vw,2.2rem);line-height:1}
+.seg.wrap{flex-wrap:wrap}
+.tbl-sm{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
+.tbl-sm th,.tbl-sm td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+.tbl-sm th{color:var(--muted);font-size:.74rem;letter-spacing:.04em}
+#sepSvg,#chromSvg,#pumpSvg{width:100%;height:auto;display:block;max-width:100%}
+@media (max-width:560px){table.facts{font-size:.84rem}table.facts th,table.facts td{padding:6px 5px}}
+
+.phone-only{display:none}
+.solchart{display:grid;gap:6px}
+.solchart h3{margin:0;font:700 .9rem var(--f-body)}
+.solchart .sr{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.85rem}
+.solchart .sr.sel{font-weight:700}
+.solchart .bar{height:10px;background:var(--surface-2);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.solchart .bar i{display:block;height:100%}
+.solchart .v{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+@media (max-width:560px){.phone-only{display:grid}#dsCanvas{aspect-ratio:1/1}
+  #sepSvg .s-lab{font-size:19px}#sepSvg .s-mut{font-size:16px}#chromSvg .s-txt,#chromSvg .s-mut{font-size:20px}#chromSvg .s-head{font-size:22px}}
+/* springs */
+:root{--sp-a:#2f6fc4;--sp-b:#7b3fbf;--rub:#b5532f;--metal:#7f8c92;--brass:#b8902f;--ptr:#c8372d;--wood:#c9a46a}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--sp-a:#5c9ef0;--sp-b:#b496f2;--rub:#e0876a;--metal:#9aa6ad;--brass:#d9b25a;--ptr:#f2837a;--wood:#a8875a}}
+:root[data-theme="dark"]{--sp-a:#5c9ef0;--sp-b:#b496f2;--rub:#e0876a;--metal:#9aa6ad;--brass:#d9b25a;--ptr:#f2837a;--wood:#a8875a}
+#psSvg,#stGraph,#kSvg{width:100%;height:auto;display:block}
+#stSvg,#mySvg{width:100%;max-width:360px;height:auto;display:block;margin:0 auto}
+.readouts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ext-in{width:84px}
+td.ok{color:var(--good);font-weight:700}td.no{color:var(--bad);font-weight:700}
+.answer-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.answer-row .num{width:110px}
+.stand-stage{display:grid;gap:10px}
+@media (max-width:560px){#stGraph .s-mut,#stGraph .s-txt,#kSvg .s-mut,#kSvg .s-txt,#psSvg .s-mut,#psSvg .s-txt{font-size:20px}#stGraph .s-lab,#kSvg .s-lab{font-size:22px}#psSvg .s-head{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div class="brand">
+      <svg width="56" height="48" viewBox="0 0 56 48" aria-hidden="true">
+        <rect x="6" y="5" width="40" height="5" rx="2" fill="currentColor" opacity=".55"/>
+        <path d="M24 10 L24 13 L32 15 L16 18 L32 21 L16 24 L32 27 L16 30 L24 32 L24 35" fill="none" stroke="var(--sp-a)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+        <rect x="17" y="35" width="14" height="9" rx="2" fill="var(--brass)"/>
+      </svg>
+      <div>
+        <p class="eyebrow">Year 8 Science · Forces</p>
+        <h1>Springs Lab</h1>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Lab stations">
+      <button role="tab" id="tab-shape" aria-controls="p-shape" aria-selected="true"><span class="n">1</span>Changing shape</button>
+      <button role="tab" id="tab-stretch" aria-controls="p-stretch" aria-selected="false" tabindex="-1"><span class="n">2</span>Stretch a spring</button>
+      <button role="tab" id="tab-mystery" aria-controls="p-mystery" aria-selected="false" tabindex="-1"><span class="n">3</span>Mystery weights</button>
+      <button role="tab" id="tab-quiz" aria-controls="p-quiz" aria-selected="false" tabindex="-1"><span class="n">4</span>Quiz</button>
+    </nav>
+  </header>
+
+  <!-- 1 SHAPE -->
+  <section id="p-shape" role="tabpanel" aria-labelledby="tab-shape">
+    <p class="intro">Forces can change the shape of an object by <b>stretching</b>, <b>squashing</b> (compressing), <b>bending</b> or <b>twisting</b> it. This is called <b>deformation</b>. To change an object’s shape you need <b>two forces</b> acting in <b>opposite directions</b>.</p>
+    <div class="station">
+      <div class="stage">
+        <div class="stage-head"><span class="big" id="psName">Not stretched</span><span class="pill" id="psPill">10.0 cm long</span></div>
+        <svg id="psSvg" viewBox="0 0 640 230" role="img" aria-label="A spring being pulled or pushed at both ends, with force arrows and a ruler"></svg>
+        <p class="caption" id="psCap"></p>
+      </div>
+      <div class="controls">
+        <div class="ctl"><h2>Force on each end <span class="small">· drag the slider</span></h2>
+          <div class="slider"><input type="range" id="psF" min="-6" max="6" step="1" value="0" aria-label="Force on each end of the spring, in newtons"></div>
+          <div class="scale"><span>squash 6 N</span><span>0</span><span>stretch 6 N</span></div>
+        </div>
+        <div class="row"><button class="btn primary" id="psGo">Let go</button></div>
+        <details class="explain"><summary>Why two forces?</summary><p>If you pull one end of a spring and nothing holds the other end, the whole spring just moves towards you. To stretch it, something must also pull the other end the opposite way. When a spring hangs from a clamp, the weight pulls the bottom down and the clamp pulls the top up.</p></details>
+      </div>
+    </div>
+    <div class="two">
+      <div class="panel">
+        <div class="sortbar"><h2>Which kind of deformation?</h2><span class="score" id="dtScore">0 / 8</span></div>
+        <div class="sortgrid" id="dtCards"></div>
+      </div>
+      <div class="panel">
+        <div class="sortbar"><h2>Elastic or plastic?</h2><span class="score" id="epScore">0 / 8</span></div>
+        <p class="small"><b>Elastic:</b> goes back to its original shape when the forces are removed. <b>Plastic:</b> stays changed.</p>
+        <div class="sortgrid" id="epCards"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 STRETCH -->
+  <section id="p-stretch" role="tabpanel" aria-labelledby="tab-stretch" hidden>
+    <p class="intro">Hang masses on the spring one at a time. Each 100 g mass has a weight of <b>1 N</b>. Read the length at the red pointer, press <b>Record</b>, then work out the <b>extension</b>: <b>extension = stretched length − original length</b>.</p>
+    <div class="station">
+      <div class="stage">
+        <div class="stage-head"><span class="big" id="stForce">0 N</span><span class="pill" id="stLen">Length 5.0 cm</span></div>
+        <svg id="stSvg" viewBox="0 0 360 560" role="img" aria-label="A spring hanging from a clamp stand beside a ruler, with masses on a hanger"></svg>
+        <p class="caption" id="stCap"></p>
+      </div>
+      <div class="controls">
+        <div class="ctl"><h2>1. Choose what to stretch</h2><div class="chips sm" id="stPick"></div></div>
+        <div class="ctl"><h2>2. Add or remove masses</h2>
+          <div class="row"><button class="btn primary" id="stAdd">Add 1 N</button><button class="btn" id="stSub">Remove 1 N</button><button class="btn" id="stOff">Take all off</button></div></div>
+        <div class="ctl"><h2>3. Record and work out the extension</h2>
+          <div class="row"><button class="btn primary" id="stRec">Record</button><button class="btn" id="stCheck">Check my extensions</button><button class="btn" id="stNew">New spring</button></div>
+          <div class="tablewrap"><table class="tbl-sm"><thead><tr><th>FORCE (N)</th><th>LENGTH (cm)</th><th>EXTENSION (cm)</th><th></th></tr></thead><tbody id="stRows"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="sortbar"><h2>Force–extension graph</h2><label class="check"><input type="checkbox" id="stFit">Show line of best fit</label></div>
+      <svg id="stGraph" viewBox="0 0 640 350" role="img" aria-label="Graph of extension against force for the recorded results"></svg>
+      <details class="explain"><summary>Hooke’s law</summary><p>For a spring, the <b>extension is directly proportional to the force</b>: double the force and the extension doubles. The graph is a straight line through the origin. This is <b>Hooke’s law</b>. It only works up to the <b>elastic limit</b>. Past the elastic limit the line curves, and the spring will not go back to its original length.</p></details>
+    </div>
+  </section>
+
+  <!-- 3 MYSTERY -->
+  <section id="p-mystery" role="tabpanel" aria-labelledby="tab-mystery" hidden>
+    <p class="intro">A spring that obeys Hooke’s law can measure forces: this is how a <b>newtonmeter</b> works. <b>Spring A</b> stretches <b>2 cm for every 1 N</b>. <b>Spring B</b> stretches <b>1 cm for every 1 N</b>. Both are 5.0 cm long with nothing on them. Hang each object and work out its weight.</p>
+    <div class="station">
+      <div class="stage">
+        <div class="stage-head"><span class="big" id="myName">Apple</span><span class="pill" id="myLen">Length 5.0 cm</span></div>
+        <svg id="mySvg" viewBox="0 0 360 560" role="img" aria-label="A mystery object hanging from a spring beside a ruler"></svg>
+        <p class="caption" id="myCap"></p>
+      </div>
+      <div class="controls">
+        <div class="ctl"><h2>1. Choose a spring</h2><div class="chips sm" id="mySpring"></div></div>
+        <div class="ctl"><h2>2. Choose an object</h2><div class="chips sm" id="myObj"></div></div>
+        <div class="ctl"><h2>3. What is its weight?</h2>
+          <div class="answer-row"><input class="num" id="myAns" type="number" step="0.5" min="0" inputmode="decimal" aria-label="Weight in newtons"><span>N</span><button class="btn primary" id="myCheck">Check</button></div></div>
+        <div class="verdict" id="myOut" aria-live="polite"><span class="small">Extension = length − 5.0 cm. Then use how far the spring stretches for each newton.</span></div>
+        <div class="row"><span class="pill" id="myScore">0 / 5 found</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Stiff and stretchy springs <span class="small">· challenge</span></h2>
+      <svg id="kSvg" viewBox="0 0 640 312" role="img" aria-label="Graph comparing the extension of Spring A and Spring B"></svg>
+      <p class="caption">For the same force, Spring B stretches less: it is <b>stiffer</b>. The <b>spring constant</b>, k, measures stiffness: <b>F = k × e</b>, with F in newtons and e in metres. Spring A: k = 1 N ÷ 0.02 m = <b>50 N/m</b>. Spring B: k = 1 N ÷ 0.01 m = <b>100 N/m</b>. A bigger spring constant means a stiffer spring.</p>
+    </div>
+  </section>
+
+  <!-- 4 QUIZ -->
+  <section id="p-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden>
+    <div class="quizbar"><p class="intro">Eight questions on springs and deformation. Read each answer carefully: the wrong ones are common mistakes.</p><div class="row"><span class="score" id="score">0 / 8</span><button class="btn" id="quizReset">Start again</button></div></div>
+    <div class="quiz" id="quiz"></div>
+  </section>
+
+  <footer>The springs are models. Spring A: original length 5.0 cm, stretches 2.0 cm per newton up to its elastic limit of 5 N. Spring B: original length 5.0 cm, stretches 1.0 cm per newton, elastic limit above 8 N. Rubber band: original length 8.0 cm, elastic but not proportional. A 100 g mass has a weight of about 1 N (g = 10 N/kg). Real springs and bands vary.</footer>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const NS = 'http://www.w3.org/2000/svg';
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function el(tag, attrs, parent, text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!=null) e.textContent=text; if(parent) parent.appendChild(e); return e; }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const f1=v=>(Math.round(v*10)/10).toFixed(1);
+function setPressed(host,btn){ host.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn)); }
+
+/* ---------- tabs + animation loop ---------- */
+const TABS=['shape','stretch','mystery','quiz'];
+let ACTIVE='shape';
+const LOOPS={};
+function showTab(id){ ACTIVE=id; TABS.forEach(t=>{ const on=t===id, b=$('#tab-'+t); b.setAttribute('aria-selected',on); b.tabIndex=on?0:-1; $('#p-'+t).hidden=!on; }); if(LOOPS[id]&&LOOPS[id].show) LOOPS[id].show(); }
+TABS.forEach((t,i)=>{ const b=$('#tab-'+t); b.addEventListener('click',()=>showTab(t));
+  b.addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return; const n=TABS[(i+(e.key==='ArrowRight'?1:TABS.length-1))%TABS.length]; showTab(n); $('#tab-'+n).focus(); }); });
+let lastT=performance.now();
+function frame(now){ const dt=Math.min(0.04,(now-lastT)/1000); lastT=now; const L=LOOPS[ACTIVE]; if(L&&L.tick) L.tick(dt,now/1000); requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+
+/* damped spring motion towards a target value */
+function wobble(o,dt){ const w=reduceMotion?30:11, z=reduceMotion?1:0.22; let moved=false;
+  for(let s=0;s<4;s++){ const h=dt/4, a=-w*w*(o.x-o.target)-2*z*w*o.v; o.v+=a*h; o.x+=o.v*h; }
+  if(Math.abs(o.x-o.target)<0.002&&Math.abs(o.v)<0.01){ if(o.x!==o.target){ o.x=o.target; o.v=0; moved=true; } } else moved=true;
+  return moved; }
+// zig-zag spring path between two points (any direction)
+function coilPath(x0,y0,x1,y1,n,w){ const dx=x1-x0, dy=y1-y0, L=Math.hypot(dx,dy)||1, ux=dx/L, uy=dy/L, nx=-uy, ny=ux, end=Math.min(10,L*0.12), body=L-2*end;
+  let d=`M${x0.toFixed(1)} ${y0.toFixed(1)} L${(x0+ux*end).toFixed(1)} ${(y0+uy*end).toFixed(1)}`;
+  for(let i=0;i<n*2;i++){ const t=end+body*(i+0.5)/(n*2), s=(i%2?-1:1)*w/2; d+=` L${(x0+ux*t+nx*s).toFixed(1)} ${(y0+uy*t+ny*s).toFixed(1)}`; }
+  d+=` L${(x1-ux*end).toFixed(1)} ${(y1-uy*end).toFixed(1)} L${x1.toFixed(1)} ${y1.toFixed(1)}`; return d; }
+function arrowH(svg,x,y,len,col,label,above){ if(Math.abs(len)<2) return; const dir=Math.sign(len), xe=x+len;
+  el('line',{x1:x,y1:y,x2:xe-dir*10,y2:y,stroke:col,'stroke-width':5,'stroke-linecap':'round'},svg);
+  el('path',{d:`M${xe} ${y} L${xe-dir*14} ${y-8} L${xe-dir*14} ${y+8}Z`,fill:col},svg);
+  if(label) el('text',{x:(x+xe)/2,y:above?y-12:y+24,'text-anchor':'middle',class:'s-txt','font-weight':700},svg,label); }
+
+/* ================= STATION 1: changing shape ================= */
+const PS={L:{x:10,v:0,target:10},F:0};
+const PX=20, PX0=110, PY=96;
+function psDraw(){ const svg=$('#psSvg'); svg.innerHTML=''; const L=PS.L.x, xr=PX0+L*PX, F=PS.F;
+  // ruler
+  el('rect',{x:PX0-6,y:150,width:18*PX+12,height:34,rx:4,fill:'var(--wood)',opacity:.35},svg);
+  for(let c=0;c<=18;c++){ const x=PX0+c*PX; el('line',{x1:x,y1:150,x2:x,y2:c%5?160:166,stroke:'var(--ink)','stroke-width':1.2},svg); if(c%2===0) el('text',{x,y:180,'text-anchor':'middle',class:'s-mut'},svg,c); }
+  el('text',{x:PX0+18*PX+16,y:180,class:'s-mut'},svg,'cm');
+  el('path',{d:`M${PX0+10*PX} 190 l-7 12 h14z`,fill:'var(--muted)'},svg);
+  el('text',{x:PX0+10*PX+12,y:202,class:'s-mut'},svg,'original length');
+  // spring + handles
+  el('path',{d:coilPath(PX0,PY,xr,PY,12,34),fill:'none',stroke:'var(--sp-b)','stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'},svg);
+  el('rect',{x:PX0-26,y:PY-22,width:22,height:44,rx:6,fill:'var(--metal)'},svg); el('rect',{x:xr+4,y:PY-22,width:22,height:44,rx:6,fill:'var(--metal)'},svg);
+  el('line',{x1:PX0-4,y1:PY,x2:PX0,y2:PY,stroke:'var(--sp-b)','stroke-width':3},svg); el('line',{x1:xr,y1:PY,x2:xr+4,y2:PY,stroke:'var(--sp-b)','stroke-width':3},svg);
+  // forces: stretching pulls outwards, squashing pushes inwards
+  const a=Math.abs(F)*13, lab=F?`${Math.abs(F)} N`:'';
+  if(F>0){ arrowH(svg,PX0-28,PY,-a,'var(--ptr)',lab,true); arrowH(svg,xr+28,PY,a,'var(--ptr)',lab,true); }
+  if(F<0){ arrowH(svg,PX0-28-a,PY,a,'var(--ptr)',lab,true); arrowH(svg,xr+28+a,PY,-a,'var(--ptr)',lab,true); }
+  el('text',{x:320,y:24,'text-anchor':'middle',class:'s-head'},svg,F>0?'Two forces pulling outwards: stretching':F<0?'Two forces pushing inwards: squashing':'No forces: the spring is its original length'); }
+function psText(){ const F=PS.F, d=Math.abs(F);
+  $('#psName').textContent=F>0?`Stretched by ${f1(d)} cm`:F<0?`Squashed by ${f1(d)} cm`:'Not stretched';
+  $('#psPill').textContent=`${f1(10+F)} cm long`;
+  $('#psCap').textContent=F>0?`A ${d} N pull on each end stretches this spring by ${d} cm. Notice there are two forces, one at each end, pulling in opposite directions.`:F<0?`A ${d} N push on each end squashes (compresses) the spring by ${d} cm. The coils get closer together.`:'Drag the slider to pull or push both ends of the spring. Then press Let go.'; }
+$('#psF').addEventListener('input',e=>{ PS.F=+e.target.value; PS.L.target=10+PS.F; psText(); });
+$('#psGo').addEventListener('click',()=>{ const was=PS.F; PS.F=0; $('#psF').value=0; PS.L.target=10; psText();
+  if(was) $('#psCap').textContent='Let go: the spring bounces back to its original length of 10.0 cm. It was not stretched past its elastic limit, so this is elastic deformation.'; });
+LOOPS.shape={tick(dt){ if(wobble(PS.L,dt)) psDraw(); }};
+psDraw(); psText();
+
+/* card sorts */
+function cardSort(host,scoreSel,items,opts){ const ans={};
+  const render=()=>{ const h=$(host); h.innerHTML='';
+    items.forEach(([name,right,why],i)=>{ const d=document.createElement('div'), done=i in ans; d.className='scard'+(done?(ans[i]===right?' right':' wrong'):'');
+      d.innerHTML=`<b>${name}</b>${done?`<span class="why"><b>${opts[right]}.</b> ${why}</span>`:`<div class="row">${opts.map((o,k)=>`<button data-v="${k}">${o}</button>`).join('')}</div>`}`;
+      d.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ ans[i]=+b.dataset.v; render(); })); h.appendChild(d); });
+    $(scoreSel).textContent=`${Object.keys(ans).filter(k=>ans[k]===items[k][1]).length} / ${items.length}`; };
+  render(); }
+cardSort('#dtCards','#dtScore',[
+  ['squeezing a sponge',1,'Your fingers push in from both sides, so the sponge is squashed (compressed).'],
+  ['a fishing rod with a fish on the line',2,'The line pulls the tip down while your hands hold the handle, so the rod bends.'],
+  ['pulling back a catapult',0,'The band is pulled back while the frame holds it forward, so the band stretches.'],
+  ['winding up the rubber band on a toy plane',3,'Turning the propeller round and round twists the band.'],
+  ['jumping on a pogo stick',1,'Your weight pushes down and the ground pushes up, so the spring is squashed.'],
+  ['a shelf loaded with heavy books',2,'The books push down in the middle while the brackets hold up the ends, so the shelf bends.'],
+  ['putting a hair bobble round a ponytail',0,'The bobble is pulled outwards all the way round, so it stretches.'],
+  ['making a balloon animal',3,'Turning the balloon round on itself twists it into sections.']],['Stretch','Squash','Bend','Twist']);
+cardSort('#epCards','#epScore',[
+  ['a tennis ball hitting a racket',0,'The ball and the strings squash, then spring back to their shape.'],
+  ['a car’s crumple zone in a crash',1,'The metal crumples and stays bent. This absorbs energy and protects the people inside.'],
+  ['stretching a spring a little',0,'Below its elastic limit, a spring goes back to its original length.'],
+  ['stretching a spring much too far',1,'Past its elastic limit, the spring stays longer: it has been permanently stretched.'],
+  ['pressing your thumb into Blu Tack',1,'The dent stays: Blu Tack does not spring back.'],
+  ['bending a ruler slightly, then letting go',0,'The ruler springs back straight.'],
+  ['a bike tyre going over a bump',0,'The tyre squashes, then goes back to its shape.'],
+  ['folding a sheet of kitchen foil',1,'The fold stays in the foil.']],['Elastic','Plastic']);
+/* ================= shared: clamp stand, spring, ruler ================= */
+const MATS={
+  a:{name:'Spring A',L0:5,col:'var(--sp-a)',kind:'spring',lim:5,per:2},
+  b:{name:'Spring B',L0:5,col:'var(--sp-b)',kind:'spring',lim:99,per:1},
+  r:{name:'Rubber band',L0:8,col:'var(--rub)',kind:'band'}};
+function ext(m,F){ if(m.kind==='band') return 3.2*F-0.18*F*F; if(F<=m.lim) return m.per*F; const d=F-m.lim; return m.per*m.lim+2.6*d+0.9*d*d; }
+function lengthOf(mat,F,Fmax){ const m=MATS[mat]; if(m.kind==='spring'&&Fmax>m.lim&&F<Fmax) return m.L0+ext(m,Fmax)-m.per*(Fmax-F); return m.L0+ext(m,F); }
+const SY=56, SS=12, SX=170;
+const OBJ={
+  apple:{name:'Apple',W:1.5},car:{name:'Toy car',W:2.5},pencil:{name:'Pencil case',W:3},shoe:{name:'Trainer',W:4},bottle:{name:'Water bottle',W:5}};
+function drawObject(svg,key,y){ const g=el('g',{},svg);
+  if(key==='apple'){ el('circle',{cx:SX,cy:y+24,r:22,fill:'#c8372d'},g); el('path',{d:`M${SX} ${y+4} q8 -8 16 -4 q-6 8 -16 4`,fill:'#3c974a'},g); }
+  else if(key==='car'){ el('rect',{x:SX-34,y:y+10,width:68,height:20,rx:6,fill:'#2f6fc4'},g); el('path',{d:`M${SX-18} ${y+10} l8 -12 h22 l8 12z`,fill:'#2f6fc4'},g); [SX-20,SX+20].forEach(cx=>el('circle',{cx,cy:y+32,r:7,fill:'#2b2f33'},g)); }
+  else if(key==='pencil'){ el('rect',{x:SX-40,y:y+4,width:80,height:30,rx:12,fill:'#7b3fbf'},g); el('line',{x1:SX-32,y1:y+12,x2:SX+32,y2:y+12,stroke:'#e8dcf7','stroke-width':2,'stroke-dasharray':'3 2'},g); }
+  else if(key==='shoe'){ el('path',{d:`M${SX-36} ${y+6} l0 22 q0 6 6 6 l62 0 q6 0 6 -6 q0 -10 -16 -12 l-14 -4 q-6 -10 -14 -10 z`,fill:'#d0443a'},g); el('rect',{x:SX-38,y:y+30,width:78,height:6,rx:3,fill:'#f1f5f3',stroke:'#53645d','stroke-width':1},g); }
+  else { el('path',{d:`M${SX-8} ${y} h16 v8 q12 6 12 18 v46 q0 6 -6 6 h-28 q-6 0 -6 -6 v-46 q0 -12 12 -18z`,fill:'#5c9ef0',opacity:.85,stroke:'#2f6fc4','stroke-width':1.5},g); el('rect',{x:SX-9,y:y-6,width:18,height:8,rx:2,fill:'#2b2f33'},g); }
+  return g; }
+function drawStand(svg,o){ svg.innerHTML=''; const m=MATS[o.mat], yb=SY+o.L*SS;
+  el('rect',{x:12,y:538,width:220,height:14,rx:4,fill:'var(--metal)'},svg);
+  el('rect',{x:36,y:26,width:10,height:514,rx:3,fill:'var(--metal)'},svg);
+  el('rect',{x:36,y:38,width:150,height:10,rx:3,fill:'var(--metal)'},svg); el('rect',{x:30,y:32,width:22,height:22,rx:4,fill:'var(--muted)'},svg);
+  el('line',{x1:SX,y1:48,x2:SX,y2:SY,stroke:'var(--muted)','stroke-width':3},svg);
+  // ruler, zero level with the top of the spring
+  el('rect',{x:238,y:SY-8,width:44,height:35*SS+16,rx:3,fill:'var(--wood)',opacity:.4,stroke:'var(--wood)'},svg);
+  for(let h=0;h<=70;h++){ const y=SY+h*SS/2, c=h/2; el('line',{x1:238,y1:y,x2:238+(h%10===0?18:h%2===0?11:6),y2:y,stroke:'var(--ink)','stroke-width':h%10===0?1.6:1},svg);
+    if(h%2===0) el('text',{x:h%10===0?262:256,y:y+4,class:h%10===0?'s-txt':'s-mut','font-size':h%10===0?13:9},svg,c); }
+  el('text',{x:260,y:SY-14,'text-anchor':'middle',class:'s-mut'},svg,'cm');
+  if(o.showOrig){ const yo=SY+m.L0*SS; el('line',{x1:120,y1:yo,x2:238,y2:yo,stroke:'var(--muted)','stroke-width':1.5,'stroke-dasharray':'5 4'},svg); el('text',{x:118,y:yo+4,'text-anchor':'end',class:'s-mut'},svg,'original'); }
+  if(m.kind==='band') el('rect',{x:SX-6,y:SY,width:12,height:o.L*SS,rx:6,fill:'none',stroke:m.col,'stroke-width':4},svg);
+  else el('path',{d:coilPath(SX,SY,SX,yb,12,26),fill:'none',stroke:m.col,'stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'},svg);
+  // pointer
+  el('line',{x1:SX+8,y1:yb,x2:234,y2:yb,stroke:'var(--ptr)','stroke-width':2.5},svg); el('path',{d:`M238 ${yb} l-9 -5 v10z`,fill:'var(--ptr)'},svg);
+  if(o.object){ el('line',{x1:SX,y1:yb,x2:SX,y2:yb+16,stroke:'var(--muted)','stroke-width':2},svg); drawObject(svg,o.object,yb+16); }
+  else if(o.n>0){ el('path',{d:`M${SX} ${yb} v8`,stroke:'var(--muted)','stroke-width':3,fill:'none'},svg); el('line',{x1:SX,y1:yb+8,x2:SX,y2:yb+80,stroke:'var(--muted)','stroke-width':3},svg);
+    el('rect',{x:SX-22,y:yb+80,width:44,height:6,rx:2,fill:'var(--brass)'},svg);
+    for(let i=0;i<o.n-1;i++) el('rect',{x:SX-20,y:yb+80-(i+1)*8,width:40,height:7,rx:2,fill:'var(--brass)',stroke:'var(--bg)','stroke-width':.8},svg);
+    el('text',{x:SX-28,y:yb+86,'text-anchor':'end',class:'s-mut'},svg,`${o.n} × 100 g`); } }
+
+/* ================= STATION 2: stretch a spring ================= */
+const ST={mat:'a',F:0,Fmax:0,L:{x:5,v:0,target:5},rows:{a:[],b:[],r:[]},overWarned:false};
+const stLen=()=>Math.round(lengthOf(ST.mat,ST.F,ST.Fmax)*10)/10;
+function stSet(){ ST.L.target=lengthOf(ST.mat,ST.F,ST.Fmax); $('#stForce').textContent=`${ST.F} N`; $('#stLen').textContent=`Length ${f1(stLen())} cm`; }
+function stDrawStand(){ drawStand($('#stSvg'),{mat:ST.mat,L:ST.L.x,n:ST.F,showOrig:true}); }
+$('#stPick').innerHTML=Object.keys(MATS).map(k=>`<button class="chip" data-k="${k}" aria-pressed="${k===ST.mat}">${MATS[k].name}</button>`).join('');
+$$('#stPick button').forEach(b=>b.addEventListener('click',()=>{ setPressed($('#stPick'),b); ST.mat=b.dataset.k; ST.F=0; ST.Fmax=0; ST.L.x=MATS[ST.mat].L0; ST.L.v=0; stSet(); stTable(); stGraph();
+  $('#stCap').textContent=`${MATS[ST.mat].name}: original length ${f1(MATS[ST.mat].L0)} cm. Add masses one at a time and record the length each time.`; }));
+function stAddF(d){ const F=clamp(ST.F+d,0,8); if(F===ST.F) return; ST.F=F; const m=MATS[ST.mat]; ST.Fmax=Math.max(ST.Fmax,F); stSet(); const L=f1(stLen());
+  if(m.kind==='spring'&&F>m.lim&&F===ST.Fmax&&d>0){ $('#stCap').innerHTML=`<b>${F} N: past the elastic limit.</b> Spring A’s elastic limit is 5 N. The extension is now growing by more than 2 cm for each newton. Record it and watch the graph.`; return; }
+  if(F===0){ const perm=lengthOf(ST.mat,0,ST.Fmax)-m.L0;
+    $('#stCap').innerHTML=perm>0.05?`All the masses are off, but ${m.name} is now <b>${f1(lengthOf(ST.mat,0,ST.Fmax))} cm</b> long, not ${f1(m.L0)} cm. It was stretched past its elastic limit, so it is permanently longer: <b>plastic deformation</b>. Press New spring to start again.`
+      :m.kind==='band'?`The rubber band is back to ${f1(m.L0)} cm, so it is <b>elastic</b>. But look at its graph: it is curved, so it does not obey Hooke’s law.`:`All the masses are off and ${m.name} is back to its original length of ${f1(m.L0)} cm: <b>elastic deformation</b>.`; return; }
+  $('#stCap').textContent=`${F} N on ${m.name}. The pointer reads ${L} cm. Press Record.`; }
+$('#stAdd').addEventListener('click',()=>stAddF(1));
+$('#stSub').addEventListener('click',()=>stAddF(-1));
+$('#stOff').addEventListener('click',()=>stAddF(-ST.F));
+$('#stNew').addEventListener('click',()=>{ ST.F=0; ST.Fmax=0; ST.rows[ST.mat]=[]; ST.L.x=MATS[ST.mat].L0; ST.L.v=0; stSet(); stTable(); stGraph(); $('#stCap').textContent=`A new ${MATS[ST.mat].name}. Original length ${f1(MATS[ST.mat].L0)} cm.`; });
+$('#stRec').addEventListener('click',()=>{ const m=MATS[ST.mat], R=ST.rows[ST.mat], un=m.kind==='spring'&&ST.Fmax>m.lim&&ST.F<ST.Fmax, key=ST.F+(un?'u':''), L=stLen();
+  const old=R.find(r=>r.key===key); if(old){ old.L=L; old.mark=null; } else R.push({key,F:ST.F,L,un,inp:'',mark:null});
+  R.sort((p,q)=>(p.un-q.un)||(p.un?q.F-p.F:p.F-q.F)); stTable(); stGraph();
+  const n=R.filter(r=>!r.un).length;
+  $('#stCap').innerHTML=n>=4&&m.kind==='spring'&&ST.Fmax<=m.lim?`Recorded ${ST.F} N and ${f1(L)} cm. The points are on a <b>straight line through the origin</b>: the extension is <b>directly proportional</b> to the force. This is Hooke’s law.`:`Recorded ${ST.F} N and ${f1(L)} cm. Now type the extension into the table: length − ${f1(m.L0)} cm.`; });
+function stTable(){ const R=ST.rows[ST.mat], m=MATS[ST.mat];
+  $('#stRows').innerHTML=R.length?R.map((r,i)=>`<tr><td class="mono">${r.F}${r.un?' <span class="small">(taking off)</span>':''}</td><td class="mono">${f1(r.L)}</td><td><input class="num ext-in" data-i="${i}" type="number" step="0.1" inputmode="decimal" value="${r.inp}" aria-label="Extension for ${r.F} newtons"></td><td class="${r.mark===true?'ok':r.mark===false?'no':''}">${r.mark===true?'✓':r.mark===false?'✗':''}</td></tr>`).join(''):`<tr><td colspan="4" class="small">No results yet. Original length: ${f1(m.L0)} cm.</td></tr>`;
+  $$('#stRows input').forEach(inp=>inp.addEventListener('input',e=>{ const r=R[+e.target.dataset.i]; r.inp=e.target.value; r.mark=null; })); }
+$('#stCheck').addEventListener('click',()=>{ const R=ST.rows[ST.mat], m=MATS[ST.mat]; if(!R.length){ $('#stCap').textContent='Record some results first.'; return; }
+  let ok=0, copied=0; R.forEach(r=>{ const want=Math.round((r.L-m.L0)*10)/10, v=parseFloat(r.inp); r.mark=isNaN(v)?false:Math.abs(v-want)<0.051; if(r.mark) ok++; if(!isNaN(v)&&Math.abs(v-r.L)<0.051&&r.F>0) copied++; });
+  stTable(); $('#stCap').innerHTML=`<b>${ok} of ${R.length}</b> extensions correct.`+(copied?' Careful: the extension is not the length. Take away the original length first.':ok<R.length?` Extension = length − original length (${f1(m.L0)} cm).`:' Well done.'); });
+/* graph */
+const GX0=70, GX1=610, GY0=290, GY1=24, gx=F=>GX0+F/8*(GX1-GX0), gy=e=>GY0-e/30*(GY0-GY1);
+function stGraph(){ const svg=$('#stGraph'); svg.innerHTML=''; const fit=$('#stFit').checked;
+  for(let F=0;F<=8;F++){ el('line',{x1:gx(F),y1:GY0,x2:gx(F),y2:GY1,stroke:'var(--line)','stroke-width':1},svg); el('text',{x:gx(F),y:GY0+20,'text-anchor':'middle',class:'s-mut'},svg,F); }
+  for(let e=0;e<=30;e+=5){ el('line',{x1:GX0,y1:gy(e),x2:GX1,y2:gy(e),stroke:'var(--line)','stroke-width':1},svg); el('text',{x:GX0-10,y:gy(e)+4,'text-anchor':'end',class:'s-mut'},svg,e); }
+  el('line',{x1:GX0,y1:GY0,x2:GX1,y2:GY0,stroke:'var(--ink)','stroke-width':1.5},svg); el('line',{x1:GX0,y1:GY0,x2:GX0,y2:GY1,stroke:'var(--ink)','stroke-width':1.5},svg);
+  el('text',{x:(GX0+GX1)/2,y:GY0+52,'text-anchor':'middle',class:'s-lab'},svg,'Force (N)');
+  el('text',{x:18,y:(GY0+GY1)/2,'text-anchor':'middle',class:'s-lab',transform:`rotate(-90 18 ${(GY0+GY1)/2})`},svg,'Extension (cm)');
+  let legend=0;
+  Object.keys(MATS).forEach(k=>{ const R=ST.rows[k], m=MATS[k]; if(!R.length) return; const load=R.filter(r=>!r.un), Fm=Math.max(0,...load.map(r=>r.F));
+    if(fit&&load.length>=2){ let d=''; for(let F=0;F<=Fm+1e-9;F+=0.1) d+=`${d?'L':'M'}${gx(F).toFixed(1)} ${gy(ext(m,F)).toFixed(1)}`; el('path',{d,fill:'none',stroke:m.col,'stroke-width':2.5,opacity:.8},svg);
+      if(m.kind==='spring'&&Fm>m.lim){ el('line',{x1:gx(m.lim),y1:gy(m.per*m.lim),x2:gx(Fm),y2:gy(m.per*Fm),stroke:m.col,'stroke-width':1.5,'stroke-dasharray':'5 4',opacity:.7},svg);
+        el('circle',{cx:gx(m.lim),cy:gy(m.per*m.lim),r:7,fill:'none',stroke:'var(--ink)','stroke-width':1.5},svg);
+        el('text',{x:gx(m.lim)+12,y:gy(m.per*m.lim)+18,class:'s-txt'},svg,'elastic limit'); } }
+    R.forEach(r=>{ const e=r.L-m.L0; el('circle',{cx:gx(r.F),cy:gy(e),r:5.5,fill:r.un?'var(--surface)':m.col,stroke:m.col,'stroke-width':2},svg); });
+    el('rect',{x:GX0+14,y:GY1+6+legend*22,width:14,height:14,rx:3,fill:m.col},svg); el('text',{x:GX0+34,y:GY1+18+legend*22,class:'s-txt'},svg,m.name+(R.some(r=>r.un)?' (hollow = taking masses off)':'')); legend++; });
+  if(!legend) el('text',{x:(GX0+GX1)/2,y:(GY0+GY1)/2,'text-anchor':'middle',class:'s-mut'},svg,'Record results to plot them here'); }
+$('#stFit').addEventListener('change',stGraph);
+LOOPS.stretch={tick(dt){ if(wobble(ST.L,dt)) stDrawStand(); }};
+stSet(); stDrawStand(); stTable(); stGraph(); $('#stCap').textContent='Spring A: original length 5.0 cm. Add a mass, read the pointer, then press Record.';
+/* ================= STATION 3: mystery weights ================= */
+const MY={spring:'a',obj:'apple',L:{x:5,v:0,target:5},found:{}};
+function myLen(){ return MATS[MY.spring].L0+MATS[MY.spring].per*OBJ[MY.obj].W; }
+function mySet(){ MY.L.target=myLen(); $('#myName').textContent=OBJ[MY.obj].name; $('#myLen').textContent=`Length ${f1(myLen())} cm`; $('#myAns').value='';
+  $('#myOut').className='verdict'; $('#myOut').innerHTML=`<span class="small">Extension = length − 5.0 cm. ${MATS[MY.spring].name} stretches ${MATS[MY.spring].per} cm for every 1 N.</span>`;
+  $('#myCap').textContent=`The ${OBJ[MY.obj].name.toLowerCase()} hangs from ${MATS[MY.spring].name}. Read the pointer, then work out the weight.`; }
+$('#mySpring').innerHTML=['a','b'].map(k=>`<button class="chip" data-k="${k}" aria-pressed="${k===MY.spring}">${MATS[k].name} · ${MATS[k].per} cm per N</button>`).join('');
+$('#myObj').innerHTML=Object.keys(OBJ).map(k=>`<button class="chip" data-k="${k}" aria-pressed="${k===MY.obj}">${OBJ[k].name}</button>`).join('');
+$$('#mySpring button').forEach(b=>b.addEventListener('click',()=>{ setPressed($('#mySpring'),b); MY.spring=b.dataset.k; mySet(); }));
+$$('#myObj button').forEach(b=>b.addEventListener('click',()=>{ setPressed($('#myObj'),b); MY.obj=b.dataset.k; MY.L.x=5; MY.L.v=0; mySet(); }));
+function myCheck(){ const v=parseFloat($('#myAns').value), o=OBJ[MY.obj], m=MATS[MY.spring], L=myLen(), e=L-m.L0, box=$('#myOut');
+  if(isNaN(v)){ box.className='verdict'; box.innerHTML='<span class="small">Type a weight in newtons first.</span>'; return; }
+  const work=`Extension = ${f1(L)} − 5.0 = ${f1(e)} cm. ${m.name} stretches ${m.per} cm per newton, so weight = ${f1(e)} ÷ ${m.per} = ${f1(o.W)} N.`;
+  if(Math.abs(v-o.W)<0.01){ MY.found[MY.obj]=true; box.className='verdict good'; box.innerHTML=`<strong>Correct: ${f1(o.W)} N</strong><span>${work}</span>`; $('#myObj').querySelector(`[data-k="${MY.obj}"]`).classList.add('ans-right'); }
+  else { box.className='verdict bad'; const hint=Math.abs(v-L)<0.05?'That is the length of the spring. Take away the original length (5.0 cm) first.':Math.abs(v-e)<0.05&&m.per!==1?`That is the extension in cm. ${m.name} stretches ${m.per} cm for each newton, so divide by ${m.per}.`:'Work out the extension first, then use how far the spring stretches for each newton.';
+    box.innerHTML=`<strong>Not quite</strong><span>${hint}</span>`; }
+  $('#myScore').textContent=`${Object.keys(MY.found).length} / 5 found`; }
+$('#myCheck').addEventListener('click',myCheck);
+$('#myAns').addEventListener('keydown',e=>{ if(e.key==='Enter') myCheck(); });
+LOOPS.mystery={tick(dt){ if(wobble(MY.L,dt)) drawStand($('#mySvg'),{mat:MY.spring,L:MY.L.x,object:MY.obj,showOrig:true}); }};
+mySet(); drawStand($('#mySvg'),{mat:MY.spring,L:MY.L.x,object:MY.obj,showOrig:true});
+
+/* stiffness graph */
+(function(){ const svg=$('#kSvg'), X0=70, X1=600, Y0=250, Y1=24, x=F=>X0+F/6*(X1-X0), y=e=>Y0-e/12*(Y0-Y1);
+  for(let F=0;F<=6;F++){ el('line',{x1:x(F),y1:Y0,x2:x(F),y2:Y1,stroke:'var(--line)'},svg); el('text',{x:x(F),y:Y0+20,'text-anchor':'middle',class:'s-mut'},svg,F); }
+  for(let e=0;e<=12;e+=2){ el('line',{x1:X0,y1:y(e),x2:X1,y2:y(e),stroke:'var(--line)'},svg); el('text',{x:X0-10,y:y(e)+4,'text-anchor':'end',class:'s-mut'},svg,e); }
+  el('line',{x1:X0,y1:Y0,x2:X1,y2:Y0,stroke:'var(--ink)','stroke-width':1.5},svg); el('line',{x1:X0,y1:Y0,x2:X0,y2:Y1,stroke:'var(--ink)','stroke-width':1.5},svg);
+  el('text',{x:(X0+X1)/2,y:Y0+54,'text-anchor':'middle',class:'s-lab'},svg,'Force (N)');
+  el('text',{x:18,y:(Y0+Y1)/2,'text-anchor':'middle',class:'s-lab',transform:`rotate(-90 18 ${(Y0+Y1)/2})`},svg,'Extension (cm)');
+  el('line',{x1:x(0),y1:y(0),x2:x(5),y2:y(10),stroke:'var(--sp-a)','stroke-width':3.5},svg); el('line',{x1:x(0),y1:y(0),x2:x(6),y2:y(6),stroke:'var(--sp-b)','stroke-width':3.5},svg);
+  el('text',{x:x(5)-8,y:y(10)-10,'text-anchor':'end',class:'s-txt','font-weight':700,fill:'var(--sp-a)'},svg,'Spring A: 2 cm per N');
+  el('text',{x:x(6)-4,y:y(6)-12,'text-anchor':'end',class:'s-txt','font-weight':700,fill:'var(--sp-b)'},svg,'Spring B: 1 cm per N');
+  el('line',{x1:x(3),y1:Y0,x2:x(3),y2:y(6),stroke:'var(--muted)','stroke-width':1.5,'stroke-dasharray':'4 3'},svg);
+  [[6,'6 cm'],[3,'3 cm']].forEach(([e,t])=>{ el('circle',{cx:x(3),cy:y(e),r:5,fill:'var(--ink)'},svg); el('text',{x:x(3)+10,y:y(e)+5,class:'s-txt'},svg,t); });
+  el('text',{x:x(3)+10,y:Y0-10,class:'s-mut'},svg,'same force: 3 N'); })();
+/* ================= STATION 4: quiz ================= */
+const QUIZ=[
+  {q:'A spring is 5.0 cm long. With a weight hanging on it, it is 11.0 cm long. What is its extension?',o:['6.0 cm','11.0 cm','16.0 cm','5.0 cm'],a:0,e:'Extension = stretched length − original length = 11.0 − 5.0 = 6.0 cm. 11.0 cm is the length, not how much longer the spring got.'},
+  {q:'What does Hooke’s law say?',o:['The extension of a spring is directly proportional to the force on it, up to the elastic limit','A spring always goes back to its original length','The length of a spring is equal to the force on it','A stiffer spring stretches more'],a:0,e:'Double the force and the extension doubles, as long as the spring is not stretched past its elastic limit.'},
+  {q:'What does the force–extension graph of a spring that obeys Hooke’s law look like?',o:['A straight line through the origin','A curve that gets steeper and steeper','A flat, horizontal line','A straight line that starts high up the extension axis'],a:0,e:'Directly proportional means a straight line that starts at (0, 0): no force, no extension.'},
+  {q:'A spring is stretched past its elastic limit, then the weights are taken off. What happens?',o:['It stays longer than its original length','It goes back to exactly its original length','It becomes shorter than its original length','It snaps straight away'],a:0,e:'Past the elastic limit the spring is permanently stretched: plastic deformation. It does not usually snap straight away.'},
+  {q:'Which of these is plastic deformation?',o:['Folding a sheet of kitchen foil','Squeezing a tennis ball','Stretching a hair bobble a little','Bending a ruler slightly and letting go'],a:0,e:'The fold stays in the foil. The other three spring back to their original shape: elastic deformation.'},
+  {q:'A spring stretches 3 cm for each 1 N. What is its extension when the force is 4 N?',o:['12 cm','7 cm','4 cm','1.3 cm'],a:0,e:'4 N × 3 cm per newton = 12 cm (as long as 4 N is below the elastic limit).'},
+  {q:'The same force acts on two springs. Spring X stretches 8 cm and spring Y stretches 2 cm. Which is true?',o:['Y is stiffer and has the bigger spring constant','X is stiffer','X has the bigger spring constant','They have the same spring constant'],a:0,e:'A stiffer spring stretches less for the same force. Its spring constant (newtons per metre of stretch) is bigger.'},
+  {q:'You stretch a spring and hold it. Where is the energy stored?',o:['In its elastic potential energy store','In its kinetic energy store','In its thermal energy store','Nowhere: it is used up'],a:0,e:'Work done stretching the spring is stored as elastic potential energy. Let go and it is transferred, for example to kinetic energy.'}
+];
+const QS={ans:{}};
+function shuffleQ(){ QUIZ.forEach(it=>{ it.order=shuffle(it.o.map((_,i)=>i)); }); }
+function renderQuiz(){ const host=$('#quiz'); host.innerHTML='';
+  QUIZ.forEach((it,n)=>{ const d=document.createElement('div'); d.className='q';
+    d.innerHTML=`<span class="qn">Question ${n+1}</span><p class="qt">${it.q}</p><div class="opts"></div><p class="fb" hidden></p>`;
+    const opts=d.querySelector('.opts'), fb=d.querySelector('.fb');
+    it.order.forEach(oi=>{ const b=document.createElement('button'); b.className='opt'; b.textContent=it.o[oi]; b.dataset.i=oi;
+      b.addEventListener('click',()=>{ if(n in QS.ans) return; QS.ans[n]=oi; opts.querySelectorAll('.opt').forEach(x=>{ x.disabled=true; if(+x.dataset.i===it.a) x.classList.add('right'); });
+        if(oi!==it.a) b.classList.add('wrong'); fb.hidden=false; fb.innerHTML=`<b>${oi===it.a?'Correct.':'Not quite.'}</b> ${it.e}`; qScore(); });
+      opts.appendChild(b); });
+    host.appendChild(d); });
+  qScore(); }
+function qScore(){ const r=Object.keys(QS.ans).filter(k=>QS.ans[k]===QUIZ[k].a).length; $('#score').textContent=`${r} / ${QUIZ.length}`; }
+$('#quizReset').addEventListener('click',()=>{ QS.ans={}; shuffleQ(); renderQuiz(); });
+shuffleQ(); renderQuiz();
+(function(){ const h=(location.hash||'').slice(1); if(TABS.includes(h)) showTab(h); })();
+</script>
+</body>
+</html>
